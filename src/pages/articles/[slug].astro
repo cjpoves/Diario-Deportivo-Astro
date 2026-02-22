@@ -1,0 +1,63 @@
+---
+
+/*
+getCollection → nos deja listar todos los artículos, getEntryBySlug → nos deja cargar un artículo por su slug
+*/
+import "../../styles/articles.css"
+
+
+import { getCollection, getEntryBySlug } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+import NewspaperLayout from "../../layouts/NewspaperLayout.astro";
+
+
+/*
+getStaticPaths función que le dice a Astro que páginas dinámicas debe generar basadas en los archivos `.md` de la colección "articles".
+*/
+export async function getStaticPaths() {
+  const articles = await getCollection("articles");
+
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+  }));
+}
+
+/*
+Leer el slug de la URL, Cuando el usuario visita /articles/madrid-win Astro pone `slug = "madrid-win"` en Astro.params
+*/
+const { slug } = Astro.params;
+
+/*
+========================
+Cargar el artículo por slug
+========================
+Aquí es donde usamos getEntryBySlug para cargar datos y contenido completo del markdown.
+*/
+const article: CollectionEntry<"articles"> | undefined =
+  await getEntryBySlug("articles", slug);
+
+if (!article) {
+  throw new Error("Artículo no encontrado");
+}
+
+const { Content } = await article.render();
+---
+
+<NewspaperLayout title={article.data.title}>
+  <article class="article">
+    <!-- Título -->
+    <h1>{article.data.title}</h1>
+
+    <!-- Autor + Fecha -->
+    <p class="articleAuthor">
+      Autor: {article.data.author} | {article.data.date}
+    </p>
+
+    <!-- Imagen -->
+    <img class="articleImg" src={article.data.image} alt={article.data.title} />
+
+    <!-- Contenido del markdown -->
+    <Content  />
+  </article>
+</NewspaperLayout>

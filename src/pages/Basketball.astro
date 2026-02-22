@@ -1,0 +1,45 @@
+---
+import "../styles/global.css"
+
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+import NewspaperLayout from "../layouts/NewspaperLayout.astro";
+
+const articles: CollectionEntry<"articles">[] = await getCollection("articles");
+
+const basketballlArticles = articles.filter(
+  (article) => article.data.category === "basketball"
+);
+---
+
+<NewspaperLayout title="Baloncesto">
+	
+<section class="articlesContainer">
+
+    {
+        basketballlArticles.map((article) => (
+
+			<div class="articleContainer">
+				<a href={`/articles/${article.slug}`}>
+
+                <article class="articlePreview">
+
+                    <img class="articleImgPreview" src={article.data.image} />
+
+                    <h2 class="articleTitlePreview">"{article.data.title}"</h2>
+
+                    <p class="articleAuthorPreview">Autor: {article.data.author}</p>
+
+                </article>
+
+            </a>
+			</div>
+            
+
+        ))
+    }
+
+</section>
+
+</NewspaperLayout> 

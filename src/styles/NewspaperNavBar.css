@@ -1,0 +1,30 @@
+.navBar{
+    display: flex;
+    justify-content: center;
+    background-color: #E41B1B;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+@media (max-width: 600px) {
+    .navBar {
+        flex-direction: column;
+        align-items: center; /* centra los elementos horizontalmente */
+        gap: 0px;
+    }
+}
+
+.enlace{
+    padding: 20px;
+    text-decoration: none;
+    color: white;
+    font-family: "Oswald", sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.enlace:hover{
+   color: yellow;
+    cursor: pointer;
+}
